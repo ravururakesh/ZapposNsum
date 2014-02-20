@@ -12,10 +12,11 @@ import com.json.parsers.JsonParserFactory;
 public class MainClass {
 	private static String Key="&key=52ddafbe3ee659bad97fcce7c53592916a6bfd73";
 	private static String baseURL="http://api.zappos.com";
-	private static String URL2="/Search/?&term=&excludes=[%22brandName%22,%22originalPrice%22,%22productUrl%22,%22thumbnailImageUrl%22,%22colorId%22,%22percentOff%22,%22styleId%22,%22productName%22]&sort={%22price%22:%22asc%22}&limit=100&page=";
+	private static String URL2="/Search/?&term=&excludes=[%22brandName%22,%22originalPrice%22,%22productUrl%22,%22thumbnailImageUrl%22,%22percentOff%22,%22styleId%22,%22productName%22]&sort={%22price%22:%22asc%22}&limit=100&page=";
 	private static char quotes='"'; 
 	private static ArrayList id = new ArrayList();
 	private static ArrayList price =  new ArrayList();
+	private static ArrayList colorId =  new ArrayList();
 	private static ArrayList Pmax = new ArrayList();
 	private static ArrayList Pmin = new ArrayList();
 	static ArrayList combinations[];
@@ -73,6 +74,8 @@ public class MainClass {
 				}
 				//key =itr.next().getClass();
 				id.add(Integer.parseInt(temp.get("productId").toString()));
+				colorId.add(Integer.parseInt(temp.get("colorId").toString()));
+				
 				//System.out.println(Integer.parseInt(temp.get("productId").toString()));
 				//System.out.println(temp.get("price").toString().substring(1));
 				endprice=Float.parseFloat(temp.get("price").toString().substring(1));
@@ -170,10 +173,10 @@ public class MainClass {
 			if(N==1){
 				for(int i= (int)indexMin.get(0); i<=(int)indexMax.get(0); i++){
 					float totalprice=0;
-						System.out.println((1)+" product is "+ id.get(i)+" price is "+ price.get(i));
+						System.out.println((1)+" product id : "+ id.get(i)+" color ID : "+colorId.get(i)+" price : "+ price.get(i));
 						totalprice=totalprice+(float)price.get(i);
 					for(int j=1;j<mainN;j++){
-						System.out.println((j+1)+" product is "+ id.get(testArray[j])+" price is "+ price.get(testArray[j]));
+						System.out.println((j+1)+" product id : "+ id.get(testArray[j])+" color ID : "+ colorId.get(testArray[j])+" price : "+ price.get(testArray[j]));
 						totalprice=totalprice+(float)price.get(testArray[j]);
 					}
 					System.out.println("Total Price is "+totalprice);
@@ -190,8 +193,9 @@ public class MainClass {
 		}
 	}
 	public static void main(String[] args) throws Exception {
-		mainN=3;
-		Price=20;
+		//input the mainN (number of products), Price (Total cost in dollors) as command line arguments
+		mainN=Integer.parseInt(args[0]);
+		Price=Integer.parseInt(args[1]);;
 		MainClass OB=new MainClass();
 		OB.getData(Price);
 		combinations=new ArrayList[OB.mainN];
